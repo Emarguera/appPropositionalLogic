@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Generador de Tablas de Verdad</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <h1>🧠 Generador de Tablas de Verdad</h1>
+
+  <section class="entrada">
+    <label for="expresion">Ingresa una proposición lógica:</label>
+    <input type="text" id="expresion" placeholder="Ej: (p ∧ ¬q) → r" />
+    <button id="generar">Generar tabla</button>
+  </section>
+
+  <section id="tabla-container"></section>
+
+  <section id="resultado-tipo"></section>
+
+  <section id="formas-normalizadas"></section>
+
+  <script src="script.js"></script>
+</body>
+</html>

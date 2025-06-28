@@ -1,0 +1,50 @@
+body {
+  font-family: Arial, sans-serif;
+  padding: 2rem;
+  background-color: #f9f9f9;
+  color: #333;
+}
+
+h1 {
+  color: #444;
+}
+
+input {
+  width: 300px;
+  padding: 8px;
+  font-size: 1rem;
+  margin-right: 10px;
+}
+
+button {
+  padding: 8px 16px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+#tabla-container {
+  margin-top: 2rem;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-top: 1rem;
+}
+
+table, th, td {
+  border: 1px solid #ccc;
+}
+
+th, td {
+  padding: 8px;
+  text-align: center;
+}
+
+td.true {
+  background-color: #d1ffd1;
+}
+
+td.false {
+  background-color: #ffd1d1;
+}

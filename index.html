@@ -1,26 +1,59 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Generador de Tablas de Verdad</title>
-  <link rel="stylesheet" href="styles.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Generador de Tablas de Verdad</title>
+    <link rel="stylesheet" href="css/style.css" />
 </head>
+
 <body>
-  <h1>🧠 Generador de Tablas de Verdad</h1>
+    <div class="container">
+        <h1>🧠 Generador de Tablas de Verdad</h1>
 
-  <section class="entrada">
-    <label for="expresion">Ingresa una proposición lógica:</label>
-    <input type="text" id="expresion" placeholder="Ej: (p ∧ ¬q) → r" />
-    <button id="generar">Generar tabla</button>
-  </section>
+        <form id="formulario-expresion" class="entrada" autocomplete="off">
+            <label for="expresion">Ingresa una proposición lógica:</label>
+            <input type="text" id="expresion" placeholder="Ej: (p ∧ ¬q) → r" />
+            <div class="teclado-logico">
+                <button class="btn-simbolo">p</button>
+                <button class="btn-simbolo">q</button>
+                <button class="btn-simbolo">r</button>
+                <button class="btn-simbolo">s</button>
+                <button class="btn-simbolo">¬</button>
+                <button class="btn-simbolo">∧</button>
+                <button class="btn-simbolo">∨</button>
+                <button class="btn-simbolo">→</button>
+                <button class="btn-simbolo">↔</button>
+                <button class="btn-simbolo">(</button>
+                <button class="btn-simbolo">)</button>
+                <button id="btn-borrar">←</button>
+                <button id="btn-limpiar">🧹</button>
+            </div>
 
-  <section id="tabla-container"></section>
+            <button type="submit" id="generar">Generar tabla</button>
+            <p id="error" class="error-message"></p>
+        </form>
 
-  <section id="resultado-tipo"></section>
+        <section id="tabla-container"></section>
 
-  <section id="formas-normalizadas"></section>
+        <section id="resultado" class="resultado">
+            <div id="clasificacion" class="info-box"></div>
+            <div id="formas-normalizadas"></div>
+        </section>
 
-  <script src="script.js"></script>
+        <footer>
+            <hr />
+            <p>Proyecto realizado por:</p>
+            <ul>
+                <li>Anthonny Rojas</li>
+                <li>Jandier Rojas</li>
+                <li>Esteban Ruiz</li>
+            </ul>
+        </footer>
+    </div>
+
+    <script src="js/script.js"></script>
 </body>
+
 </html>

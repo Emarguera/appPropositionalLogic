@@ -10,32 +10,28 @@
 
 <body>
     <div class="container">
-        <h1>🧠 Generador de Tablas de Verdad</h1>
+        <h1>Generador de Tablas de Verdad</h1>
 
         <form id="formulario-expresion" class="entrada" autocomplete="off">
             <label for="expresion">Ingresa una proposición lógica:</label>
             <input type="text" id="expresion" placeholder="Ej: (p ∧ ¬q) → r" />
-            <div class="teclado-logico">
-                <button class="btn-simbolo">p</button>
-                <button class="btn-simbolo">q</button>
-                <button class="btn-simbolo">r</button>
-                <button class="btn-simbolo">s</button>
-                <button class="btn-simbolo">¬</button>
-                <button class="btn-simbolo">∧</button>
-                <button class="btn-simbolo">∨</button>
-                <button class="btn-simbolo">→</button>
-                <button class="btn-simbolo">↔</button>
-                <button class="btn-simbolo">(</button>
-                <button class="btn-simbolo">)</button>
-                <button id="btn-borrar">←</button>
-                <button id="btn-limpiar">🧹</button>
+            <!-- Botones de símbolos -->
+            <div class="botonera-simbolos">
+                <button type="button" class="btn-simbolo">¬</button>
+                <button type="button" class="btn-simbolo">∧</button>
+                <button type="button" class="btn-simbolo">∨</button>
+                <button type="button" class="btn-simbolo">→</button>
+                <button type="button" class="btn-simbolo">↔</button>
+                <button type="button" class="btn-simbolo">(</button>
+                <button type="button" class="btn-simbolo">)</button>
             </div>
-
             <button type="submit" id="generar">Generar tabla</button>
             <p id="error" class="error-message"></p>
         </form>
 
-        <section id="tabla-container"></section>
+        <section id="tabla-container">
+            <div id="tabla-container" class="tabla-wrapper"></div>
+        </section>
 
         <section id="resultado" class="resultado">
             <div id="clasificacion" class="info-box"></div>

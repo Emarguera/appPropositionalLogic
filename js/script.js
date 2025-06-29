@@ -180,7 +180,7 @@ function mostrarError(mensaje) {
     errorBox.textContent = mensaje;
 }
 
-// Evento submit del formulario para evitar recarga
+// Evento submit del formulario
 document.getElementById("formulario-expresion").addEventListener("submit", function (event) {
     event.preventDefault();
 
@@ -225,39 +225,26 @@ document.getElementById("formulario-expresion").addEventListener("submit", funct
 
     const formas = obtenerFormasNormalizadas(variables, combinaciones, resultados);
     document.getElementById("formas-normalizadas").innerHTML = `
-    <h2>🧩 Formas Normalizadas</h2>
+    <h2>Formas Normalizadas</h2>
     <p><strong>Forma Normal Conjuntiva (FNC):</strong><br>${formas.fnc}</p>
     <p><strong>Forma Normal Disyuntiva (FND):</strong><br>${formas.fnd}</p>
   `;
 });
 
-// Insertar símbolo en el input
+// Insertar símbolo al hacer clic en los botones de símbolo
 document.querySelectorAll('.btn-simbolo').forEach(btn => {
   btn.addEventListener('click', () => {
     const input = document.getElementById('expresion');
-    const cursorPos = input.selectionStart;
     const simbolo = btn.textContent;
-    const before = input.value.substring(0, cursorPos);
-    const after = input.value.substring(cursorPos);
+    const start = input.selectionStart;
+    const end = input.selectionEnd;
+
+    const before = input.value.substring(0, start);
+    const after = input.value.substring(end);
     input.value = before + simbolo + after;
+
+    const cursorPos = start + simbolo.length;
     input.focus();
-    input.setSelectionRange(cursorPos + simbolo.length, cursorPos + simbolo.length);
+    input.setSelectionRange(cursorPos, cursorPos);
   });
 });
-
-// Borrar último carácter
-document.getElementById('btn-borrar').addEventListener('click', () => {
-  const input = document.getElementById('expresion');
-  const cursorPos = input.selectionStart;
-  if (cursorPos > 0) {
-    input.value = input.value.substring(0, cursorPos - 1) + input.value.substring(cursorPos);
-    input.focus();
-    input.setSelectionRange(cursorPos - 1, cursorPos - 1);
-  }
-});
-
-// Limpiar campo completo
-document.getElementById('btn-limpiar').addEventListener('click', () => {
-  document.getElementById('expresion').value = '';
-});
-

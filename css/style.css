@@ -1,165 +1,169 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
-
 body {
-  font-family: 'Inter', sans-serif;
-  background-color: #1e1e1e;
-  color: #e0e0e0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f4f4f4;
+  min-height: 100vh;
   margin: 0;
-  padding: 3rem 1rem;
+
   display: flex;
   justify-content: center;
+  align-items: flex-start; /* Para que no quede pegado verticalmente en móviles */
+  padding: 1rem;
+  box-sizing: border-box;
 }
 
-
-h1 {
-  text-align: center;
-  font-size: 2rem;
-  color: #00bcd4;
-  margin-bottom: 2rem;
-}
-
-.entrada {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.75rem;
-  margin-bottom: 1.5rem;
-  justify-content: center;
-}
-
-label {
-  font-weight: 600;
-  color: #cccccc;
+.container {
+  background-color: #fff;
+  padding: 2rem 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
   width: 100%;
+  max-width: 600px;  /* Máximo ancho, pero flexible */
+  box-sizing: border-box;
   text-align: center;
 }
 
+/* Inputs y botones ocupan el 100% del ancho del contenedor */
 input[type="text"] {
-  flex: 1;
-  padding: 0.75rem 1rem;
-  font-size: 1rem;
-  border: 1px solid #333;
-  border-radius: 6px;
-  background-color: #2a2a2a;
-  color: #f5f5f5;
   width: 100%;
-  max-width: 400px;
+  padding: 0.5rem 1rem;
+  font-size: 1.1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-sizing: border-box;
 }
 
 button {
-  padding: 0.75rem 1.25rem;
+  margin-top: 1rem;
+  padding: 0.6rem 1.2rem;
   font-size: 1rem;
-  font-weight: 600;
-  background-color: #00bcd4;
-  color: #1e1e1e;
+  cursor: pointer;
   border: none;
   border-radius: 6px;
-  cursor: pointer;
+  background-color: #4a90e2;
+  color: white;
   transition: background-color 0.3s ease;
+  width: 100%;
 }
 
 button:hover {
-  background-color: #00acc1;
+  background-color: #357ABD;
 }
 
-.error-message {
-  color: #ff6b6b;
-  margin-top: 0.5rem;
-  font-weight: 600;
+/* Tabla con scroll horizontal si se reduce la pantalla */
+table {
+  border-collapse: collapse;
+  margin: 1.5rem auto 0 auto;
+  width: 100%;
+  overflow-x: auto;
+  display: block;
+}
+
+th, td {
+  border: 1px solid #ccc;
+  padding: 0.5rem 0;
   text-align: center;
+  font-weight: normal;
+  font-size: 0.9rem;
+  white-space: nowrap;
 }
 
-#tabla-container {
-  margin-top: 2rem;
+.true {
+  background-color: #c8e6c9;
+  color: #2e7d32;
+  font-weight: bold;
+}
+
+.false {
+  background-color: #ffcdd2;
+  color: #c62828;
+  font-weight: bold;
+}
+
+#error {
+  color: #c62828;
+  margin-top: 1rem;
+  font-weight: 600;
+  word-break: break-word;
+}
+
+#clasificacion, #formas-normalizadas {
+  margin-top: 1rem;
+  font-weight: 600;
+  color: #333;
+  word-wrap: break-word;
+}
+
+.tabla-wrapper {
+  width: 100%;
+  overflow-x: auto; /* Permite scroll horizontal si hace falta */
+}
+
+table {
+  width: 100%;
+  max-width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0 0 0;
+  /* quitamos display: block para que use el ancho completo */
+}
+
+th, td {
+  border: 1px solid #ccc;
+  padding: 0.5rem 0;
+  text-align: center;
+  white-space: nowrap; /* Evita que las celdas se quiebren en líneas */
+  font-weight: normal;
+  font-size: 0.9rem;
+}
+
+.tabla-wrapper {
+  width: 100%;
   overflow-x: auto;
 }
 
 table {
   width: 100%;
   border-collapse: collapse;
-  background-color: #2a2a2a;
-  border-radius: 8px;
-  overflow: hidden;
+  margin: 1.5rem 0 0 0;
+  table-layout: fixed; /* Distribuye columnas uniformemente */
 }
 
-th,
-td {
-  border: 1px solid #444;
-  padding: 0.75rem 1rem;
+th, td {
+  border: 1px solid #ccc;
+  padding: 0.5rem 0.25rem;
   text-align: center;
-  font-weight: 500;
-}
-
-th {
-  background-color: #333;
-  color: #00bcd4;
-}
-
-.true {
-  color: #4caf50;
-}
-
-.false {
-  color: #f44336;
-}
-
-.info-box,
-#resultado-tipo,
-#formas-normalizadas {
-  margin-top: 2rem;
-  padding: 1rem;
-  background-color: #2e2e2e;
-  border-left: 4px solid #00bcd4;
-  border-radius: 6px;
-}
-
-#formas-normalizadas h2 {
-  margin-top: 0;
-  color: #00bcd4;
-  font-size: 1.2rem;
-}
-
-footer {
-  margin-top: 3rem;
-  text-align: center;
+  font-weight: normal;
   font-size: 0.9rem;
-  color: #777;
+  /* Permitimos que el texto se quiebre para que la tabla no se compacte */
+  white-space: normal;
+  word-wrap: break-word;
 }
 
-.container {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 2rem;
-  background-color: #262626;
-  border-radius: 12px;
-  box-shadow: 0 0 20px rgba(0, 188, 212, 0.1);
+/* Columna Resultado un poco más ancha */
+th:last-child, td:last-child {
+  width: 15%;
+  min-width: 80px;
+  font-weight: 700;
 }
 
-.teclado-logico {
+.botonera-simbolos {
   display: flex;
-  flex-wrap: wrap;
+  overflow-x: auto;
   gap: 0.5rem;
-  justify-content: center;
-  margin-top: 1rem;
+  margin: 10px 0;
+  padding: 5px;
 }
 
-.teclado-logico button {
-  padding: 0.6rem 1rem;
-  font-size: 1.1rem;
-  background-color: #333;
-  color: #00bcd4;
-  border: 1px solid #444;
+.btn-simbolo {
+  padding: 8px 14px;
+  font-size: 1.2rem;
+  border: none;
   border-radius: 6px;
+  background-color: #e0e0e0;
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  white-space: nowrap;
+  transition: background-color 0.2s;
 }
 
-.teclado-logico button:hover {
-  background-color: #444;
-}
-
-.teclado-logico #btn-limpiar,
-.teclado-logico #btn-borrar {
-  background-color: #444;
-  color: #ff6b6b;
+.btn-simbolo:hover {
+  background-color: #ccc;
 }

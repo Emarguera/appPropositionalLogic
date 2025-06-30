@@ -1,10 +1,8 @@
-// Extrae variables únicas de la expresión (letras minúsculas)
 function extraerVariables(expresion) {
-    const letras = expresion.match(/[a-z]/g);
-    return [...new Set(letras)].sort();
+    const letras = expresion.match(/[a-zA-Z]/g);
+    return [...new Set(letras)].sort((a, b) => a.localeCompare(b));
 }
 
-// Genera todas las combinaciones posibles de valores para las variables
 function generarCombinaciones(variables) {
     const total = 2 ** variables.length;
     const combinaciones = [];
@@ -20,37 +18,39 @@ function generarCombinaciones(variables) {
     return combinaciones;
 }
 
-// Función lógica para la equivalencia ↔
 function equiv(a, b) {
     return (a && b) || (!a && !b);
 }
 
-// Traduce símbolos lógicos a operadores JS
 function traducirExpresion(expr) {
     return expr
         .replace(/¬/g, '!')
         .replace(/∧/g, '&&')
         .replace(/∨/g, '||')
         .replace(/→/g, '||')   // Implementación básica de implicación
-        .replace(/↔/g, '<=>'); // Marcador temporal para bicondicional
+        .replace(/↔/g, '<=>');
 }
 
-// Evalúa la expresión traducida para cada combinación de variables
 function evaluarExpresion(exprTraducida, variables, combinaciones) {
     const resultados = [];
 
     for (let i = 0; i < combinaciones.length; i++) {
         const fila = combinaciones[i];
-        const contexto = variables.map(v => `let ${v} = ${fila[v]};`).join('');
-        let expresionFinal = exprTraducida;
+        let contexto = '';
+        let expr = exprTraducida;
 
-        expresionFinal = expresionFinal.replace(/([a-z])\s*\|\|\s*([a-z])/g, '!$1 || $2');
-        expresionFinal = expresionFinal.replace(/(.+?)\s*<=>\s*(.+)/, 'equiv($1, $2)');
+        // Declarar variables con 'let nombre = valor'
+        variables.forEach(v => {
+            contexto += `let ${v} = ${fila[v]}; `;
+        });
+
+        // Reemplazar bicondicional
+        expr = expr.replace(/(.+?)\s*<=>\s*(.+)/, 'equiv($1, $2)');
 
         try {
-            const resultado = eval(`${contexto} ${expresionFinal}`);
+            const resultado = eval(`${contexto} ${expr}`);
             resultados.push(Boolean(resultado));
-        } catch (error) {
+        } catch (e) {
             mostrarError("Error de sintaxis al evaluar la expresión. Revisa la estructura.");
             return null;
         }
@@ -59,9 +59,8 @@ function evaluarExpresion(exprTraducida, variables, combinaciones) {
     return resultados;
 }
 
-// Muestra la tabla de verdad en HTML
 function mostrarTabla(variables, combinaciones, resultados = []) {
-    const container = document.getElementById("tabla-container");
+    const container = document.getElementById("tabla-wrapper");
     container.innerHTML = "";
 
     const table = document.createElement("table");
@@ -104,7 +103,6 @@ function mostrarTabla(variables, combinaciones, resultados = []) {
     container.appendChild(table);
 }
 
-// Valida la expresión lógica: caracteres, paréntesis, operadores
 function validarExpresion(expr) {
     const permitidos = /^[a-zA-Z¬∧∨→↔()\s]+$/;
     if (!permitidos.test(expr)) {
@@ -126,7 +124,6 @@ function validarExpresion(expr) {
     return null;
 }
 
-// Verifica balance de paréntesis
 function verificarParentesis(expr) {
     let balance = 0;
     for (let char of expr) {
@@ -137,7 +134,6 @@ function verificarParentesis(expr) {
     return balance === 0;
 }
 
-// Clasifica la proposición: tautología, contradicción o contingencia
 function clasificarProposicion(resultados) {
     const todosVerdaderos = resultados.every(r => r === true);
     const todosFalsos = resultados.every(r => r === false);
@@ -147,7 +143,6 @@ function clasificarProposicion(resultados) {
     return "Contingencia ⚠️";
 }
 
-// Obtiene FNC y FND desde tabla de verdad
 function obtenerFormasNormalizadas(variables, combinaciones, resultados) {
     const fnd = [];
     const fnc = [];
@@ -156,13 +151,11 @@ function obtenerFormasNormalizadas(variables, combinaciones, resultados) {
         const fila = combinaciones[i];
         const resultado = resultados[i];
 
-        // Para FND: resultado verdadero
         if (resultado) {
             const conjuncion = variables.map(v => (fila[v] ? v : `¬${v}`)).join(' ∧ ');
             fnd.push(`(${conjuncion})`);
         }
 
-        // Para FNC: resultado falso
         if (!resultado) {
             const disyuncion = variables.map(v => (fila[v] ? `¬${v}` : v)).join(' ∨ ');
             fnc.push(`(${disyuncion})`);
@@ -180,7 +173,6 @@ function mostrarError(mensaje) {
     errorBox.textContent = mensaje;
 }
 
-// Evento submit del formulario
 document.getElementById("formulario-expresion").addEventListener("submit", function (event) {
     event.preventDefault();
 
@@ -190,7 +182,7 @@ document.getElementById("formulario-expresion").addEventListener("submit", funct
     if (!expresion) {
         clasificacion.innerHTML = "";
         document.getElementById("formas-normalizadas").innerHTML = "";
-        document.getElementById("tabla-container").innerHTML = "";
+        document.getElementById("tabla-wrapper").innerHTML = "";
         mostrarError("");
         return;
     }
@@ -200,7 +192,7 @@ document.getElementById("formulario-expresion").addEventListener("submit", funct
         mostrarError(error);
         clasificacion.innerHTML = "";
         document.getElementById("formas-normalizadas").innerHTML = "";
-        document.getElementById("tabla-container").innerHTML = "";
+        document.getElementById("tabla-wrapper").innerHTML = "";
         return;
     } else {
         mostrarError("");
@@ -214,7 +206,7 @@ document.getElementById("formulario-expresion").addEventListener("submit", funct
     if (!resultados) {
         clasificacion.innerHTML = "";
         document.getElementById("formas-normalizadas").innerHTML = "";
-        document.getElementById("tabla-container").innerHTML = "";
+        document.getElementById("tabla-wrapper").innerHTML = "";
         return;
     }
 
@@ -225,26 +217,25 @@ document.getElementById("formulario-expresion").addEventListener("submit", funct
 
     const formas = obtenerFormasNormalizadas(variables, combinaciones, resultados);
     document.getElementById("formas-normalizadas").innerHTML = `
-    <h2>Formas Normalizadas</h2>
-    <p><strong>Forma Normal Conjuntiva (FNC):</strong><br>${formas.fnc}</p>
-    <p><strong>Forma Normal Disyuntiva (FND):</strong><br>${formas.fnd}</p>
-  `;
+        <h2>Formas Normalizadas</h2>
+        <p><strong>Forma Normal Conjuntiva (FNC):</strong><br>${formas.fnc}</p>
+        <p><strong>Forma Normal Disyuntiva (FND):</strong><br>${formas.fnd}</p>
+    `;
 });
 
-// Insertar símbolo al hacer clic en los botones de símbolo
 document.querySelectorAll('.btn-simbolo').forEach(btn => {
-  btn.addEventListener('click', () => {
-    const input = document.getElementById('expresion');
-    const simbolo = btn.textContent;
-    const start = input.selectionStart;
-    const end = input.selectionEnd;
+    btn.addEventListener('click', () => {
+        const input = document.getElementById('expresion');
+        const simbolo = btn.textContent;
+        const start = input.selectionStart;
+        const end = input.selectionEnd;
 
-    const before = input.value.substring(0, start);
-    const after = input.value.substring(end);
-    input.value = before + simbolo + after;
+        const before = input.value.substring(0, start);
+        const after = input.value.substring(end);
+        input.value = before + simbolo + after;
 
-    const cursorPos = start + simbolo.length;
-    input.focus();
-    input.setSelectionRange(cursorPos, cursorPos);
-  });
+        const cursorPos = start + simbolo.length;
+        input.focus();
+        input.setSelectionRange(cursorPos, cursorPos);
+    });
 });

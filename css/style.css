@@ -22,11 +22,19 @@ body {
   text-align: center;
 }
 
+/* POSIBLE ARREGLO PARA QUE EL CONTAINER SE VEA MAS GRANDE*/
+.container{
+  margin: 15rem 0 0rem 0;
+  max-width: 100rem;
+}
+
+
+
 /* Inputs y botones ocupan el 100% del ancho del contenedor */
 input[type="text"] {
   width: 100%;
   padding: 0.5rem 1rem;
-  font-size: 1.1rem;
+  font-size: 1.8rem;
   border: 1px solid #ccc;
   border-radius: 6px;
   box-sizing: border-box;
@@ -35,7 +43,7 @@ input[type="text"] {
 button {
   margin-top: 1rem;
   padding: 0.6rem 1.2rem;
-  font-size: 1rem;
+  font-size: 1.8rem;
   cursor: pointer;
   border: none;
   border-radius: 6px;
@@ -84,6 +92,7 @@ th, td {
   margin-top: 1rem;
   font-weight: 600;
   word-break: break-word;
+  font-size: 1.8rem;
 }
 
 #clasificacion, #formas-normalizadas {
@@ -132,7 +141,7 @@ th, td {
   padding: 0.5rem 0.25rem;
   text-align: center;
   font-weight: normal;
-  font-size: 0.9rem;
+  font-size: 1.4rem;
   /* Permitimos que el texto se quiebre para que la tabla no se compacte */
   white-space: normal;
   word-wrap: break-word;
@@ -158,12 +167,33 @@ th:last-child, td:last-child {
   font-size: 1.2rem;
   border: none;
   border-radius: 6px;
-  background-color: #e0e0e0;
+  /* background-color: #e0e0e0; */
+
+  /* POSIBLE COLOR PARA QUE SEA RESPONSIVE */
+  background-color: #585858;  
   cursor: pointer;
   white-space: nowrap;
-  transition: background-color 0.2s;
+  transition: background-color 0.4s;
 }
 
 .btn-simbolo:hover {
   background-color: #ccc;
+  
+}
+.titulo-integrantes{
+  text-align: center;
+  font-size: 1.8rem;
+  margin: auto 1.2;
+  font-weight: 600;
+}
+.estudiantes-proyecto{
+  list-style: none;
+  text-align: center;
+  font-size: 1.4rem;
+}
+.estudiante{
+  padding: 0.4rem;
+}
+.cta-titulo{
+  font-size: 1.8rem;
 }

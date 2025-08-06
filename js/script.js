@@ -1,5 +1,3 @@
-// script.js completo con extracción de subexpresiones y columnas intermedias
-
 // Extrae variables únicas de la expresión (mayúsculas y minúsculas)
 function extraerVariables(expresion) {
     const letras = expresion.match(/[a-zA-Z]/g);
@@ -55,7 +53,6 @@ function extraerSubexpresiones(expresion) {
         }
     }
 
-    // También incluimos ¬X si no están entre paréntesis
     const negaciones = expresion.match(/¬[a-zA-Z]/g);
     if (negaciones) {
         negaciones.forEach(n => subexpresiones.add(n));
@@ -72,7 +69,6 @@ function evaluarConSubexpresiones(exprOriginal, variables, combinaciones) {
 
     for (let expr of todas) {
         const exprTraducida = traducirExpresion(expr);
-
         const resultados = [];
 
         for (let fila of combinaciones) {
@@ -93,48 +89,56 @@ function evaluarConSubexpresiones(exprOriginal, variables, combinaciones) {
 
 // Muestra la tabla con columnas intermedias
 function mostrarTabla(variables, combinaciones, resultadosPorExpr) {
-    const container = document.getElementById("tabla-container");
+    const container = document.getElementById("tabla-wrapper");
     container.innerHTML = "";
 
     const table = document.createElement("table");
-    const header = document.createElement("tr");
+    table.className = "tabla-verdad";
+
+    const thead = document.createElement("thead");
+    const encabezado = document.createElement("tr");
 
     variables.forEach(v => {
         const th = document.createElement("th");
         th.textContent = v;
-        header.appendChild(th);
+        encabezado.appendChild(th);
     });
 
-    const exprs = Object.keys(resultadosPorExpr);
-    exprs.forEach(expr => {
+    const subexprs = Object.keys(resultadosPorExpr);
+    subexprs.forEach(expr => {
         const th = document.createElement("th");
         th.textContent = expr;
-        header.appendChild(th);
+        encabezado.appendChild(th);
     });
 
-    table.appendChild(header);
+    thead.appendChild(encabezado);
+    table.appendChild(thead);
+
+    const tbody = document.createElement("tbody");
 
     for (let i = 0; i < combinaciones.length; i++) {
         const tr = document.createElement("tr");
 
         variables.forEach(v => {
             const td = document.createElement("td");
-            td.textContent = combinaciones[i][v] ? 'V' : 'F';
-            td.className = combinaciones[i][v] ? 'true' : 'false';
+            const valor = combinaciones[i][v];
+            td.textContent = valor ? "V" : "F";
+            td.className = valor ? "true" : "false";
             tr.appendChild(td);
         });
 
-        exprs.forEach(expr => {
+        subexprs.forEach(expr => {
             const td = document.createElement("td");
-            const val = resultadosPorExpr[expr][i];
-            td.textContent = val === true ? 'V' : val === false ? 'F' : 'Error';
-            td.className = val === true ? 'true' : val === false ? 'false' : 'error';
+            const valor = resultadosPorExpr[expr][i];
+            td.textContent = valor ? "V" : "F";
+            td.className = valor ? "true" : "false";
             tr.appendChild(td);
         });
 
-        table.appendChild(tr);
+        tbody.appendChild(tr);
     }
 
+    table.appendChild(tbody);
     container.appendChild(table);
 }
 
@@ -162,9 +166,8 @@ function mostrarError(mensaje) {
 }
 
 function clasificarProposicion(resultados) {
-    const r = resultados[resultados.length - 1]; // última expresión
-    const todosVerdaderos = r.every(val => val === true);
-    const todosFalsos = r.every(val => val === false);
+    const todosVerdaderos = resultados.every(val => val === true);
+    const todosFalsos = resultados.every(val => val === false);
     if (todosVerdaderos) return "Tautología ✅";
     if (todosFalsos) return "Contradicción ❌";
     return "Contingencia ⚠️";
@@ -193,7 +196,6 @@ function obtenerFormasNormalizadas(variables, combinaciones, resultadosFinales) 
 }
 
 // Manejo del formulario
-
 document.getElementById("formulario-expresion").addEventListener("submit", function (event) {
     event.preventDefault();
 
@@ -233,13 +235,18 @@ document.getElementById("formulario-expresion").addEventListener("submit", funct
     const formas = obtenerFormasNormalizadas(variables, combinaciones, resultadosFinales);
     document.getElementById("formas-normalizadas").innerHTML = `
         <h2>Formas Normalizadas</h2>
-        <p><strong>Forma Normal Conjuntiva (FNC):</strong><br>${formas.fnc}</p>
-        <p><strong>Forma Normal Disyuntiva (FND):</strong><br>${formas.fnd}</p>
+        <div class="bloque-forma">
+            <b>Forma Normal Conjuntiva (FNC):</b><br>
+            ${formas.fnc}
+        </div>
+        <div class="bloque-forma">
+            <b>Forma Normal Disyuntiva (FND):</b><br>
+            ${formas.fnd}
+        </div>
     `;
 });
 
 // Botones de símbolos
-
 document.querySelectorAll('.btn-simbolo').forEach(btn => {
     btn.addEventListener('click', () => {
         const input = document.getElementById('expresion');

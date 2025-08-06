@@ -10,46 +10,48 @@
 
 <body>
     <div class="container">
-        <h1>Generador de Tablas de Verdad</h1>
-
-        <form id="formulario-expresion" class="entrada" autocomplete="off">
-            <label for="expresion" class="cta-titulo">Ingresa una proposición lógica:</label>
-            <input type="text" id="expresion" placeholder="Ej: (P ∧ ¬q) → R" />
-            <!-- Botones de símbolos -->
-            <div class="botonera-simbolos">
-                <button type="button" class="btn-simbolo">¬</button>
-                <button type="button" class="btn-simbolo">∧</button>
-                <button type="button" class="btn-simbolo">∨</button>
-                <button type="button" class="btn-simbolo">→</button>
-                <button type="button" class="btn-simbolo">↔</button>
-                <button type="button" class="btn-simbolo">(</button>
-                <button type="button" class="btn-simbolo">)</button>
-            </div>
-            <button type="submit" id="generar">Generar tabla</button>
-            <p id="error" class="error-message"></p>
-        </form>
-
-        <section id="tabla-container">
-            <div id="tabla-wrapper" class="tabla-wrapper"></div>
-        </section>
-
-        <section id="resultado" class="resultado">
-            <div id="clasificacion" class="info-box"></div>
-            <div id="formas-normalizadas"></div>
-        </section>
-
-        <footer>
-            <hr />
-            <p class="titulo-integrantes">Proyecto realizado por:</p>
-            <ul class="estudiantes-proyecto">
-                <li class="estudiante">Anthonny Rojas</li>
-                <li class="estudiante">Jandier Rojas</li>
-                <li class="estudiante">Esteban Ruiz</li>
-            </ul>
-        </footer>
+      <h1>Generador de Tablas de Verdad</h1>
+  
+      <form id="formulario-expresion" class="entrada" autocomplete="off">
+        <label for="expresion" class="cta-titulo">Ingresa una proposición lógica:</label>
+        <input type="text" id="expresion" placeholder="Ej: (P ∧ ¬q) → R" />
+  
+        <div class="botonera-simbolos">
+          <button type="button" class="btn-simbolo">¬</button>
+          <button type="button" class="btn-simbolo">∧</button>
+          <button type="button" class="btn-simbolo">∨</button>
+          <button type="button" class="btn-simbolo">→</button>
+          <button type="button" class="btn-simbolo">↔</button>
+          <button type="button" class="btn-simbolo">(</button>
+          <button type="button" class="btn-simbolo">)</button>
+        </div>
+  
+        <button type="submit" id="generar">Generar tabla</button>
+        <p id="error" class="error-message"></p>
+      </form>
+  
+      <section id="tabla-container">
+        <div id="tabla-wrapper" class="tabla-wrapper"></div>
+      </section>
+  
+      <section id="resultado" class="resultado">
+        <div id="clasificacion" class="info-box"></div>
+        <div id="formas-normalizadas"></div>
+      </section>
+  
+      <footer>
+        <hr />
+        <p class="titulo-integrantes">Proyecto realizado por:</p>
+        <ul class="estudiantes-proyecto">
+          <li class="estudiante">Anthonny Rojas</li>
+          <li class="estudiante">Jandier Rojas</li>
+          <li class="estudiante">Esteban Ruiz</li>
+        </ul>
+      </footer>
     </div>
-
+  
     <script src="js/script.js"></script>
-</body>
+  </body>
+  
 
 </html>

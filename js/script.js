@@ -1,4 +1,6 @@
-// UI helpers
+// =======================
+// Helpers de UI
+// =======================
 const $ = (q) => document.querySelector(q);
 const $$ = (q) => Array.from(document.querySelectorAll(q));
 
@@ -7,7 +9,9 @@ function copyText(text){
   navigator.clipboard?.writeText(text).then(()=>{}).catch(()=>{});
 }
 
+// =======================
 // Normalización / Tokens
+// =======================
 function normalizarInput(expr) {
   expr = (expr || "").replace(/\s+/g, " ").trim();
 
@@ -51,13 +55,16 @@ function tokenizar(expr) {
   return tokens;
 }
 
-// Shunting-yard & Eval, esto mejora la recepción de los datos
+// =======================
+// Shunting-yard & Eval
+// =======================
 function aRPN(tokens) {
   const out = [];
   const ops = [];
 
+  // Precedencia: ¬ > ∧ > ∨ > → > ↔
   const prec = { [TOK.NOT]:4, [TOK.AND]:3, [TOK.OR]:2, [TOK.IMP]:1, [TOK.IFF]:0 };
-  const rightAssoc = new Set([TOK.IMP]); // → es right-assoc; ↔ lo dejamos left
+  const rightAssoc = new Set([TOK.IMP]); // → es asociativo a la derecha
 
   for (let i=0;i<tokens.length;i++) {
     const tk = tokens[i];
@@ -122,12 +129,13 @@ function evaluarFormula(expr, valuacion) {
   return evaluarRPN(rpn, valuacion);
 }
 
+// =======================
 // Utilidades de la app
+// =======================
 function extraerVariables(expresion) {
   const norm = normalizarInput(expresion);
   // Variables 1+ caracteres alfanuméricos/underscore comenzando con letra
   const vars = norm.match(/\b[A-Za-z][A-Za-z0-9_]*\b/g) || [];
-  // Filtrar palabras que sean operadores si coincidieran (no deberían)
   const set = new Set();
   for (const v of vars) {
     if (!["¬","∧","∨","→","↔"].includes(v)) set.add(v);
@@ -188,6 +196,47 @@ function clasificarProposicion(resultados) {
   if (todosVerdaderos) return "Tautología ✅";
   if (todosFalsos) return "Contradicción ❌";
   return "Contingencia ⚠️";
+}
+
+// -------- Explicación con "testigos" --------
+function resumenValuacion(variables, fila){
+  // Devuelve "P=V, Q=F, R=V"
+  return variables.map(v => `${v}=${fila[v] ? 'V' : 'F'}`).join(', ');
+}
+function explicarClasificacion(variables, combinaciones, resultadosFinales){
+  const n = combinaciones.length;
+  const trueIdx = resultadosFinales.findIndex(x => x === true);
+  const falseIdx = resultadosFinales.findIndex(x => x === false);
+  const trueCount = resultadosFinales.filter(Boolean).length;
+  const pct = ((trueCount / n) * 100).toFixed(1);
+
+  if (trueIdx === -1) {
+    // Contradicción
+    const w = resumenValuacion(variables, combinaciones[0]);
+    return `
+      <div class="meta">Clasificación: Contradicción</div>
+      La proposición es <strong>falsa en todas</strong> las ${n} valuaciones posibles.
+      <div class="witness">Ejemplo: ${w} ⇒ F</div>
+    `;
+  }
+  if (falseIdx === -1) {
+    // Tautología
+    const w = resumenValuacion(variables, combinaciones[0]);
+    return `
+      <div class="meta">Clasificación: Tautología</div>
+      La proposición es <strong>verdadera en todas</strong> las ${n} valuaciones posibles.
+      <div class="witness">Ejemplo: ${w} ⇒ V</div>
+    `;
+  }
+  // Contingencia: muestra un testigo V y uno F
+  const wV = resumenValuacion(variables, combinaciones[trueIdx]);
+  const wF = resumenValuacion(variables, combinaciones[falseIdx]);
+  return `
+    <div class="meta">Clasificación: Contingencia</div>
+    La proposición es verdadera en <strong>${trueCount}/${n} (${pct}%)</strong> valuaciones y falsa en el resto.
+    <div class="witness">Ejemplo verdadero: ${wV} ⇒ V</div>
+    <div class="witness">Ejemplo falso: ${wF} ⇒ F</div>
+  `;
 }
 
 function obtenerFormasNormalizadas(variables, combinaciones, resultadosFinales) {
@@ -259,7 +308,9 @@ function renderTabla(variables, combinaciones, resultadosPorExpr) {
   container.appendChild(table);
 }
 
-// Form / Eventos
+// =======================
+// Eventos
+// =======================
 $("#ejemplos").addEventListener("change", (e)=>{
   if (e.target.value) $("#expresion").value = e.target.value;
 });
@@ -307,6 +358,7 @@ $("#formulario-expresion").addEventListener("submit", (ev)=>{
   if (!input) {
     setError("");
     $("#clasificacion").innerHTML = "";
+    $("#explicacion").innerHTML = "";
     $("#formas-normalizadas").innerHTML = "";
     $("#tabla-wrapper").innerHTML = "";
     return;
@@ -317,6 +369,7 @@ $("#formulario-expresion").addEventListener("submit", (ev)=>{
   if (error) {
     setError(error);
     $("#clasificacion").innerHTML = "";
+    $("#explicacion").innerHTML = "";
     $("#formas-normalizadas").innerHTML = "";
     $("#tabla-wrapper").innerHTML = "";
     return;
@@ -341,6 +394,9 @@ $("#formulario-expresion").addEventListener("submit", (ev)=>{
   const resultadosFinales = exprsArrays[exprsArrays.length - 1];
   const tipo = clasificarProposicion(resultadosFinales);
   $("#clasificacion").innerHTML = `Tipo: <strong>${tipo}</strong>`;
+
+  // Explicación
+  $("#explicacion").innerHTML = explicarClasificacion(variables, combinaciones, resultadosFinales);
 
   // FNC / FND
   const formas = obtenerFormasNormalizadas(variables, combinaciones, resultadosFinales);
@@ -368,14 +424,17 @@ $("#formulario-expresion").addEventListener("submit", (ev)=>{
       setTimeout(()=> btn.textContent = "Copiar", 1200);
     };
   });
+});
 
-  $("#btn-clear").addEventListener("click", () => {
+// Botón Limpiar
+$("#btn-clear").addEventListener("click", () => {
   $("#expresion").value = "";
   setError("");
   $("#clasificacion").innerHTML = "";
+  $("#explicacion").innerHTML = "";
   $("#formas-normalizadas").innerHTML = "";
   $("#tabla-wrapper").innerHTML = "";
   $("#ejemplos").value = "";
-});
-
+  // Si quieres resetear también el toggle, descomenta:
+  // $("#toggle-subexpr").checked = false;
 });

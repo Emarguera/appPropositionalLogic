@@ -1,57 +1,80 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Generador de Tablas de Verdad</title>
-    <link rel="stylesheet" href="css/style.css" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Tablas de Verdad — Minimal</title>
+  <link rel="stylesheet" href="css/style.css" />
 </head>
-
 <body>
-    <div class="container">
-      <h1>Generador de Tablas de Verdad</h1>
-  
-      <form id="formulario-expresion" class="entrada" autocomplete="off">
-        <label for="expresion" class="cta-titulo">Ingresa una proposición lógica:</label>
-        <input type="text" id="expresion" placeholder="Ej: (P ∧ ¬q) → R" />
-  
-        <div class="botonera-simbolos">
-          <button type="button" class="btn-simbolo">¬</button>
-          <button type="button" class="btn-simbolo">∧</button>
-          <button type="button" class="btn-simbolo">∨</button>
-          <button type="button" class="btn-simbolo">→</button>
-          <button type="button" class="btn-simbolo">↔</button>
-          <button type="button" class="btn-simbolo">(</button>
-          <button type="button" class="btn-simbolo">)</button>
-        </div>
-  
-        <button type="submit" id="generar">Generar tabla</button>
-        <p id="error" class="error-message"></p>
-      </form>
-  
-      <section id="tabla-container">
-        <div id="tabla-wrapper" class="tabla-wrapper"></div>
-      </section>
-  
-      <section id="resultado" class="resultado">
-        <div id="clasificacion" class="info-box"></div>
-        <div id="formas-normalizadas"></div>
-      </section>
-  
-      <footer>
-        <hr />
-        <p class="titulo-integrantes">Proyecto realizado por:</p>
-        <ul class="estudiantes-proyecto">
-          <li class="estudiante">Anthonny Rojas</li>
-          <li class="estudiante">Jandier Rojas</li>
-          <li class="estudiante">Esteban Ruiz</li>
-        </ul>
-      </footer>
-    </div>
-  
-    <script src="js/script.js"></script>
-  </body>
-  
+  <main class="shell">
+    <header class="bar">
+      <h1>Tablas de Verdad</h1>
+      <div class="bar-actions">
+        <label class="chk">
+          <input type="checkbox" id="toggle-subexpr" />
+          <span>Columnas intermedias</span>
+        </label>
+      </div>
+    </header>
 
+    <section class="panel">
+      <form id="formulario-expresion" autocomplete="off">
+        <div class="input-row">
+            <input id="expresion" type="text" placeholder="Ej: (P ∧ ¬Q) → R" />
+            <button id="generar" type="submit" class="btn btn-primary">Generar</button>
+            <button type="button" id="btn-clear" class="btn">Limpiar</button>
+        </div>
+
+
+        <div class="toolbar">
+          <div class="symbol-row" aria-label="Insertar símbolos">
+            <button type="button" class="btn-simbolo" title="No (¬)">¬</button>
+            <button type="button" class="btn-simbolo" title="Y (∧)">∧</button>
+            <button type="button" class="btn-simbolo" title="O (∨)">∨</button>
+            <button type="button" class="btn-simbolo" title="Implica (→)">→</button>
+            <button type="button" class="btn-simbolo" title="Doble implica (↔)">↔</button>
+            <button type="button" class="btn-simbolo" title="(">(</button>
+            <button type="button" class="btn-simbolo" title=")">)</button>
+          </div>
+          <div class="examples">
+            <select id="ejemplos">
+              <option value="">Ejemplos rápidos…</option>
+              <option>(P ∨ ¬P)</option>
+              <option>(P ∧ ¬P)</option>
+              <option>P → Q</option>
+              <option>(P ∧ ¬Q) → R</option>
+              <option>((P ∨ Q) ∧ (R ∨ ¬S)) → T</option>
+              <option>P <-> Q</option>
+              <option>!(p /\ q) -> r</option>
+            </select>
+          </div>
+        </div>
+
+        <p id="error" class="error" aria-live="polite"></p>
+      </form>
+    </section>
+
+    <section class="grid">
+      <article class="card">
+        <h2 class="card-title">Resultado</h2>
+        <div id="clasificacion" class="lead"></div>
+        <div id="formas-normalizadas" class="fn-block">
+          <!-- FNC/FND render aquí -->
+        </div>
+      </article>
+
+      <article class="card table-card">
+        <h2 class="card-title">Tabla</h2>
+        <div id="tabla-wrapper" class="tabla-wrapper"></div>
+      </article>
+    </section>
+
+    <footer class="foot">
+      <span>Proyecto: A. Rojas · J. Rojas · E. Ruiz</span>
+    </footer>
+  </main>
+
+  <script src="js/script.js"></script>
+</body>
 </html>

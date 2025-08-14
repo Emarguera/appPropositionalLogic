@@ -1,6 +1,4 @@
-// =======================
 // UI helpers
-// =======================
 const $ = (q) => document.querySelector(q);
 const $$ = (q) => Array.from(document.querySelectorAll(q));
 
@@ -9,9 +7,7 @@ function copyText(text){
   navigator.clipboard?.writeText(text).then(()=>{}).catch(()=>{});
 }
 
-// =======================
 // Normalización / Tokens
-// =======================
 function normalizarInput(expr) {
   expr = (expr || "").replace(/\s+/g, " ").trim();
 
@@ -55,9 +51,7 @@ function tokenizar(expr) {
   return tokens;
 }
 
-// =======================
-// Shunting-yard & Eval
-// =======================
+// Shunting-yard & Eval, esto mejora la recepción de los datos
 function aRPN(tokens) {
   const out = [];
   const ops = [];
@@ -128,9 +122,7 @@ function evaluarFormula(expr, valuacion) {
   return evaluarRPN(rpn, valuacion);
 }
 
-// =======================
 // Utilidades de la app
-// =======================
 function extraerVariables(expresion) {
   const norm = normalizarInput(expresion);
   // Variables 1+ caracteres alfanuméricos/underscore comenzando con letra
@@ -267,9 +259,7 @@ function renderTabla(variables, combinaciones, resultadosPorExpr) {
   container.appendChild(table);
 }
 
-// =======================
 // Form / Eventos
-// =======================
 $("#ejemplos").addEventListener("change", (e)=>{
   if (e.target.value) $("#expresion").value = e.target.value;
 });
